@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { DecorateRequest } from "../middleware/Userauthorizationmiddleware";
 import { ProjectSchame } from "../models/ProjectModels";
+import { TodoSchema } from "../models/TodoModels";
 
 const addproject=async(req:DecorateRequest,res:Response)=>{
     try{
@@ -33,10 +34,8 @@ const updateproject=async(req:DecorateRequest,res:Response)=>{
 const deleteproject=async(req:DecorateRequest,res:Response)=>{
     try{
        const deleteproject=await ProjectSchame.findByIdAndDelete(req.body.data)
-       if(deleteproject)
+       const deletetodo=await TodoSchema.deleteMany({projectid:req.body.data})
        res.status(200).json({success:true,message:"Project Deleted Successfully"})
-       else
-       res.status(400).json({success:false,message:"Failed to Delete the Message"})
     }
     catch(error:any)
     {
