@@ -15,7 +15,7 @@ res.status(201).json({success:true,message:"Todo Added Successfully"})
 
 const updateTodo=async(req:DecorateRequest,res:Response)=>{
     try{
-    const updatetodo=await TodoSchema.findByIdAndUpdate(req.body.data.id,req.body.data.todo,{new:true})
+    const updatetodo=await TodoSchema.findByIdAndUpdate(req.body.data.id,req.body.data.tododata,{new:true})
     if(updatetodo)
     res.status(201).json({success:true,message:"Todoupdated Successfully",data:updatetodo})
     else
