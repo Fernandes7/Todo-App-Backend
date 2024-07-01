@@ -23,7 +23,7 @@ Follow these instructions to set up and run the project on your local machine.
 1. **Clone the repository:**
 
    ```sh
-   git clone https://github.com/yourusername/todo-app-backend.git
+   git clone https://github.com/Fernandes7/todo-app-backend.git
  2. **Install Dependencies and Run the Project:**
 
    ```sh
