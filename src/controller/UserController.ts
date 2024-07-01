@@ -1,4 +1,5 @@
 import { Request,Response } from "express"
+import bcrypt from "bcrypt"
 import { UserSchema } from "../models/UserModel"
 import { createJsonwebtoken } from "../components/JwtTokenVerification"
 import { DecorateRequest } from "../middleware/Userauthorizationmiddleware"
@@ -10,8 +11,9 @@ const signUp=async(req:Request,res:Response)=>{
         if(isUserEmailExist)
             res.status(200).json({success:false,message:"User With same Email Already Exist"})
         else{
-            const userData=new UserSchema(req.body.data)
-            await userData.save()
+            const hashedPassword = await bcrypt.hash(req.body.data.userpassword, 10);
+           const userData = new UserSchema({ ...req.body.data,userpassword: hashedPassword});
+        await userData.save();
             res.status(201).json({success:true,message:"User Registerd Successfully"})
         }
     }
@@ -25,7 +27,8 @@ const login=async(req:Request,res:Response)=>{
     try{
     const isUserExist=await UserSchema.findOne({useremail:req.body.data.useremail})
     if(isUserExist){
-        if(isUserExist.userpassword===req.body.data.userpassword){
+        const isPasswordValid = await bcrypt.compare(req.body.data.userpassword, isUserExist.userpassword);
+        if(isPasswordValid){
             const accesstoken=createJsonwebtoken(isUserExist._id)
             if(accesstoken){
                 res.cookie("accesstoken",accesstoken)
